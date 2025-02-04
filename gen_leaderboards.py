@@ -125,9 +125,14 @@ async def generate_leaderboard(
     name: str, inventory_values: dict[int, int], usernames: dict[int, str]
 ) -> None:
     sorted_leaderboard = {
-        user_id: (inventory_value, usernames[user_id])
-        for user_id, inventory_value in sorted(
-            inventory_values.items(), key=lambda item: item[1], reverse=True
+        user_id: {
+            "place": place,
+            "inventory_value": inventory_value,
+            "username": usernames[user_id],
+        }
+        for place, (user_id, inventory_value) in enumerate(
+            sorted(inventory_values.items(), key=lambda item: item[1], reverse=True),
+            start=1,
         )
     }
     with open(
